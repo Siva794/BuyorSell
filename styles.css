@@ -1,0 +1,1196 @@
+/* === Base === */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    background: #f0f0f0;
+}
+
+main {
+    padding-bottom: 60px;
+}
+
+input,
+select,
+textarea,
+button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+button {
+    cursor: pointer;
+}
+
+h1,
+h2 {
+    text-align: center;
+}
+
+.section {
+    display: none;
+    padding: 20px;
+}
+
+.section.active {
+    display: block;
+}
+
+/* === Header === */
+.appHeader {
+    background: #007acc;
+    color: white;
+    padding: 12px;
+    position: relative;
+    display: flex;
+}
+
+.profileIcon {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+
+/* === Navigation === */
+.topNav,
+.bottomNav {
+    display: flex;
+    background: #0066cc;
+    justify-content: space-around;
+}
+
+.topNav button,
+.bottomNav button {
+    flex: 1;
+    padding: 12px;
+    background: inherit;
+    color: white;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.topNav button.active,
+.bottomNav button.active {
+    background: #005bb5;
+}
+
+.bottomNav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    z-index: 1000;
+}
+
+/* === Product Grid === */
+#productsGrid,
+#myGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    padding: 10px;
+    align-items: start;
+    /* ✅ Prevent tall card stretching */
+}
+
+/* ✅ Large devices: 3 columns */
+@media (min-width: 768px) {
+
+    #productsGrid,
+    #myGrid {
+        grid-template-columns: repeat(3, 1fr);
+        padding: 10px;
+    }
+}
+
+
+.card {
+    background: white;
+    padding: 10px;
+    border-radius: 6px;
+    box-shadow: 0 0 5px #ccc;
+    cursor: pointer;
+}
+
+.card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+/* === Filter Buttons === */
+#filterButtons {
+    text-align: center;
+    margin: 10px 0;
+}
+
+#filterButtons button {
+    margin: 5px;
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: none;
+    background: #e0e0e0;
+    cursor: pointer;
+}
+
+#filterButtons button.active {
+    background: #007acc;
+    color: white;
+}
+
+/* === Carousel === */
+.carousel img {
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+/* === Success Banner === */
+.success-msg {
+    background-color: #d4edda;
+    border-left: 5px solid #28a745;
+    padding: 10px;
+    margin-top: 10px;
+    color: #155724;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+/* === Profile Page === */
+#profile form {
+    max-width: 400px;
+    margin: auto;
+    text-align: center;
+}
+
+#profile.section.active {
+    padding: 40px 16px;
+    min-height: 100vh;
+    box-sizing: border-box;
+    margin: auto;
+
+}
+
+
+.quote {
+    margin: 10px 0;
+    font-style: italic;
+    color: #555;
+    font-size: 0.95rem;
+}
+
+#profile button {
+    width: 48%;
+    margin: 5px 1%;
+}
+
+/* === Utilities === */
+.hidden {
+    display: none !important;
+}
+
+/* === Responsive Breakpoints === */
+@media (min-width: 768px) {
+    .bottomNav {
+        display: none;
+    }
+
+    .hide-desktop {
+        display: none !important;
+    }
+}
+
+/* === Messages Section === */
+#messagesList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 10px;
+}
+
+#messagesList .card {
+    background: white;
+    border-left: 4px solid #007acc;
+    padding: 12px;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+#messagesList .card p {
+    margin: 4px 0;
+}
+
+/* === Chat Thread === */
+.chat-page {
+    display: none;
+    flex-direction: column;
+    height: 100vh;
+    padding-bottom: 120px;
+    /* space for input + bottomNav */
+    position: relative;
+}
+
+.chat-page.active {
+    display: flex;
+}
+
+.chat-header {
+    background: #007acc;
+    color: white;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+}
+
+.chat-header h2 {
+    flex: 1;
+    text-align: center;
+    margin: 0;
+}
+
+.chat-back {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.0rem;
+    cursor: pointer;
+    text-align: center;
+    border-style: solid;
+    border-color: white;
+    display: inline;
+    width: 20%;
+}
+
+/* === Chat Message Area === */
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    background: #e5ddd5;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* === Chat Input Box === */
+.chat-input-box {
+    position: absolute;
+    bottom: 60px;
+    /* just above bottomNav */
+    left: 0;
+    right: 0;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    background: #f1f1f1;
+    border-top: 1px solid #ccc;
+}
+
+.chat-input-box textarea {
+    flex: 1;
+    height: 40px;
+    resize: none;
+    padding: 8px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+.chat-input-box button {
+    height: 40px;
+    width: 40px;
+    padding: 0;
+    font-size: 1.2rem;
+    background: #007acc;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* === Chat Bubble Styling === */
+.message-bubble {
+    max-width: 70%;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    word-wrap: break-word;
+}
+
+.message-left {
+    background: #fff;
+    align-self: flex-start;
+    border-top-left-radius: 0;
+}
+
+.message-right {
+    background: #dcf8c6;
+    align-self: flex-end;
+    border-top-right-radius: 0;
+}
+
+.timestamp {
+    display: block;
+    font-size: 0.75rem;
+    color: #555;
+    margin-top: 4px;
+    text-align: right;
+}
+
+.tick {
+    font-size: 0.9rem;
+    margin-left: 4px;
+    color: #555;
+}
+
+.tick.blue {
+    color: #0b93f6;
+}
+
+/* Show on mobile */
+.bottomNav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #0066cc;
+    justify-content: space-around;
+    z-index: 1000;
+}
+
+main {
+    padding-bottom: 80px;
+    /* enough space for navbar and input */
+}
+
+.chat-tabs {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+    gap: 8px;
+}
+
+.chat-tabs button {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: none;
+    background: #e0e0e0;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.chat-tabs button.active {
+    background: #007acc;
+    color: white;
+}
+
+#scrollToBottomBtn {
+    position: absolute;
+    bottom: 130px;
+    right: 16px;
+    z-index: 999;
+    padding: 6px 12px;
+    background: #007acc;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    display: none;
+}
+
+.chat-avatar {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    background: #007acc;
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 28px;
+    margin-right: 6px;
+    font-weight: bold;
+}
+
+#chatUploadStatus {
+    text-align: center;
+    padding: 10px;
+    font-style: italic;
+    font-weight: bold;
+    color: #007acc;
+}
+
+progress {
+    width: 80%;
+    margin: 10px auto;
+    display: block;
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    color: red;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-top: 4px;
+}
+
+.warning {
+    background: #fff4e5;
+    border-left: 5px solid #ff9900;
+    color: #b22222;
+    padding: 10px;
+    font-weight: bold;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.warning-btn {
+    background: #ff9900;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.warning {
+    background: #fff4e5;
+    border-left: 5px solid #ff9900;
+    color: #b22222;
+    padding: 10px;
+    font-weight: bold;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.warning-btn {
+    background: #ff9900;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.notif-badge {
+    background: red;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    margin-left: 6px;
+    font-weight: bold;
+}
+
+.card .carousel {
+    position: relative;
+    overflow: hidden;
+    border-radius: 6px;
+}
+
+.card .carousel img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
+    border-radius: 6px;
+}
+
+.card .carousel-prev,
+.card .carousel-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.4);
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    z-index: 10;
+    border-radius: 50%;
+}
+
+.card .carousel-prev {
+    left: 10px;
+}
+
+.card .carousel-next {
+    right: 10px;
+}
+
+#preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+#preview img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+
+#preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.preview-box {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.preview-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.remove-preview-btn {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: rgba(255, 0, 0, 0.85);
+    color: white;
+    border: none;
+    font-size: 0.75rem;
+    line-height: 1;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.remove-preview-btn:hover {
+    background: red;
+}
+
+/* === Timestamp Label === */
+.timestamp-label {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 4px;
+}
+
+/* === Sticky Search Bar Container === */
+.search-bar-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background: white;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    gap: 8px;
+}
+
+/* === Search Input === */
+#searchBar {
+    flex: 1;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+/* === Filter Button (outside input, left of search bar) === */
+#filterToggleBtn {
+    background: #007acc;
+    color: white;
+    border: none;
+    padding: 8px;
+    font-size: 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    /* ✅ Prevent button from stretching */
+}
+
+/* === Filter Dropdown Panel === */
+#filterDropdown {
+    background: #f9f9f9;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+#filterDropdown label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 0.95rem;
+}
+
+/* === Utility: Hidden Element === */
+.hidden {
+    display: none !important;
+}
+
+/* === Mobile Responsiveness === */
+@media (max-width: 600px) {
+    #filterToggleBtn {
+        font-size: 1.3rem;
+        padding: 10px;
+    }
+
+    #searchBar {
+        flex: 1;
+        padding: 10px;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+    }
+}
+
+.center {
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* === Header / Top Bar === */
+.topHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #007acc;
+    color: white;
+    padding: 12px 20px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.siteTitle {
+    margin: 0;
+    font-size: 2.0rem;
+    text-align: left;
+    display: inline;
+    border-style: solid;
+    border-color: white;
+    border-radius: 4px;
+    padding: 4px;
+    margin-right: 0px;
+    cursor: pointer;
+}
+
+.topActions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.topActions button {
+    background: white;
+    color: #007acc;
+    font-weight: bold;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.dropdownWrapper {
+    position: relative;
+}
+
+.menuDropdown {
+    position: absolute;
+    top: 110%;
+    right: 0;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+.menuDropdown button {
+    background: white;
+    border: none;
+    padding: 10px 16px;
+    text-align: left;
+    font-weight: bold;
+    cursor: pointer;
+    color: #007acc;
+}
+
+.menuDropdown button:hover {
+    background: #f0f8ff;
+}
+
+/* === Layout: Sidebar + Market === */
+.marketContainer {
+    display: flex;
+}
+
+.filterSidebar {
+    width: 240px;
+    padding: 16px;
+    background: #f5f5f5;
+    border-right: 1px solid #ccc;
+    display: none;
+}
+
+.filterSidebar h3 {
+    margin-top: 0;
+}
+
+.filterSidebar label {
+    display: block;
+    margin-bottom: 12px;
+    font-weight: bold;
+}
+
+.marketMain {
+    flex: 1;
+    padding: 16px;
+}
+
+/* === Show sidebar on large screens only === */
+@media (min-width: 768px) {
+    .filterSidebar {
+        display: block;
+    }
+}
+
+/* === Hide mobile nav on desktop === */
+@media (min-width: 768px) {
+    .bottomNav {
+        display: none;
+    }
+}
+
+.welcome-text {
+    font-weight: normal;
+    color: white;
+    font-size: 1.0rem;
+    padding-left: 2px;
+    margin-top: auto;
+    margin-bottom: 6px;
+    display: inline;
+}
+
+/* === Unified red circular badge === */
+.msg-badge {
+    background: red;
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 50%;
+    font-weight: bold;
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    min-width: 18px;
+    height: 18px;
+    text-align: center;
+    line-height: 14px;
+    z-index: 10;
+}
+
+/* Ensure buttons can position relative to badge */
+.nav-messages-btn {
+    position: relative;
+}
+
+.msg-badge {
+    background: red;
+    color: white;
+    font-size: 0.65rem;
+    padding: 0 5px;
+    min-width: 16px;
+    height: 16px;
+    line-height: 16px;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    text-align: center;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.nav-messages-btn {
+    position: relative;
+}
+
+main {
+    display: flex;
+    gap: 20px;
+}
+
+/* 🔧 Fix spacing issue on small devices */
+@media (max-width: 767px) {
+    main {
+        padding: 10px;
+        /* reduce padding */
+        margin: 0;
+        /* remove unintended margins */
+        flex-direction: column;
+        /* just in case */
+    }
+
+    body {
+        padding: 0;
+        margin: 0;
+    }
+
+    .section {
+        padding: 10px;
+        /* tighten spacing inside sections */
+    }
+}
+
+/* 🛠️ Force mobile spacing to be tight */
+@media (max-width: 767px) {
+    body {
+        padding: 0;
+        margin: 0;
+    }
+
+    main {
+        padding: 0 !important;
+        margin: 0 !important;
+        flex-direction: column;
+        gap: 0 !important;
+    }
+
+    .section {
+        padding: 10px !important;
+    }
+
+    .sidebar {
+        display: none !important;
+    }
+
+    .search-bar-wrapper {
+        padding: 8px 10px !important;
+    }
+
+    #productsGrid,
+    #myGrid {
+        padding: 8px !important;
+    }
+}
+
+#loadMoreBtn {
+    margin-bottom: 80px;
+    /* Adjust as needed for safe spacing */
+}
+
+@media (max-width: 767px) {
+    #loadMoreBtn {
+        margin-bottom: 100px;
+        /* Extra space for mobile nav bar */
+    }
+}
+
+.search-bar-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background: white;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    gap: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#filterToggleBtn {
+    background: #007acc;
+    color: white;
+    border: none;
+    padding: 8px 10px;
+    font-size: 1.1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+#searchBar {
+    flex: 1;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.card {
+    background: white;
+    padding: 8px;
+    border-radius: 6px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.card-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 2px 0;
+}
+
+.card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 4px;
+}
+
+.card-price {
+    font-size: 0.95rem;
+    font-weight: normal;
+    margin: 0;
+}
+
+.timestamp-label {
+    font-size: 0.75rem;
+    color: #777;
+    text-align: right;
+    margin: 0;
+}
+
+/* Hide sidebar on small screens */
+.sidebar {
+    display: none;
+}
+
+/* Show on large screens */
+@media (min-width: 768px) {
+    .sidebar {
+        display: block;
+        width: 240px;
+        padding: 16px;
+        background: #f9f9f9;
+        border-right: 1px solid #ccc;
+    }
+
+    main {
+        display: flex;
+        gap: 20px;
+    }
+
+    #market {
+        flex: 1;
+    }
+}
+
+/* 📦 Side-by-side layout */
+.market-container {
+    display: block;
+}
+
+@media (min-width: 768px) {
+    .market-container {
+        display: flex;
+        gap: 20px;
+    }
+
+    .sidebar {
+        width: 240px;
+        flex-shrink: 0;
+        padding: 16px;
+        background: #f4f4f4;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        position: sticky;
+        top: 90px;
+        /* sticks below header/nav */
+        align-self: flex-start;
+        height: fit-content;
+    }
+
+    #productsGrid {
+        flex: 1;
+    }
+}
+
+@media (min-width: 768px) {
+    #filterToggleBtn {
+        display: none !important;
+    }
+
+    #filterDropdown {
+        display: none !important;
+    }
+}
+
+.card {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar input[type="number"],
+.sidebar select {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 6px 10px;
+    margin-top: 4px;
+    font-size: 0.95rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.bottom-navbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    z-index: 999;
+    background: #fff;
+    box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.section {
+    margin-bottom: 72px;
+    /* navbar height + extra space */
+}
+
+#chatThread.section {
+    margin-bottom: 0 !important;
+}
+
+.back-btn {
+    background: none;
+    border: solid;
+    color: #007bff;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 16px;
+    cursor: pointer;
+    display: inline-block;
+    padding: 8px 0;
+    text-align: center;
+    border-color: #007bff;
+    width: 20%
+}
+
+.back-btn:hover {
+    text-decoration: underline;
+    background-color: lightblue;
+}
+
+/* Show appHeader only on tablets/desktops */
+.appHeader {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .appHeader {
+        display: block;
+    }
+
+    .topHeader {
+        display: none;
+    }
+}
+
+[data-nav].active {
+    font-weight: bold;
+    color: #007bff;
+    border-bottom: 2px solid #007bff;
+}
+
+
+
+/* Show appHeader only on tablets/desktops */
+.appHeader {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .appHeader {
+        display: block;
+        background: #007acc;
+        display: flex;
+        padding: 12px 20px;
+        border-bottom: 1px solid #e0e0e0;
+        flex-wrap: wrap;
+        position: relative;
+    }
+
+    .topHeader {
+        display: none;
+    }
+}
+
+.appNav-sec {
+    display: flex;
+    gap: 10px;
+    margin-left: auto;
+}
+
+.appNav-btn {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    color: white;
+    transition: background 0.2s;
+    margin: 0px;
+    padding: 0px;
+}
+
+.productDetails-wrapper {
+    margin-left: auto;
+}
