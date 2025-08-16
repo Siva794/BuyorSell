@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="styles.css" />
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/compressorjs@1.2.1/dist/compressor.min.js"></script>
     <script src="script.js" defer></script>
 </head>
@@ -22,6 +23,7 @@
             <button data-nav="market" class="appNav-btn">🛒 Market</button>
             <button data-nav="post" class="appNav-btn">➕ Post</button>
             <button data-nav="myposts" class="appNav-btn">📦 My Posts</button>
+            <button data-nav="profile" class="appNav-btn">👤 Profile</button>
         </div>
     </header>
 
@@ -70,6 +72,7 @@
                     <option>🪑 Furniture</option>
                     <option>📱 Electronics</option>
                     <option>🚗 Vehicles</option>
+                    <option>Others</option>
                 </select>
 
                 <select id="condition" required>
@@ -102,39 +105,39 @@
             <!-- 🔍 Search Bar + Toggle (always on top) -->
             <div class="search-bar-wrapper">
                 <button id="filterToggleBtn" title="Filters">⚙️</button>
-                <input type="search" id="searchBar" placeholder="Search..." />
+                <input type="text" id="searchInput" placeholder="Search..." />
+
             </div>
 
             <!-- 📱 Mobile Filter Dropdown (hidden by default) -->
             <div id="filterDropdown" class="hidden">
-                <label for="categoryFilter">Category</label>
-                <select id="categoryFilter">
+                <label for="mobileCategoryFilter">Category</label>
+                <select id="mobileCategoryFilter">
                     <option value="All">All</option>
                     <option value="🪑 Furniture">🪑 Furniture</option>
                     <option value="📱 Electronics">📱 Electronics</option>
                     <option value="🚗 Vehicles">🚗 Vehicles</option>
                 </select>
 
-                <label for="sortBy">Sort By</label>
-                <select id="sortBy">
-                    <option value="newest">Newest</option>
+                <label for="mobileSortBy">Sort By</label>
+                <select id="mobileSortBy">
+                    <option value="latest">Newest</option>
                     <option value="oldest">Oldest</option>
-                    <option value="price_asc">Price: Low to High</option>
-                    <option value="price_desc">Price: High to Low</option>
+                    <option value="price_low_high">Price: Low to High</option>
+                    <option value="price_high_low">Price: High to Low</option>
                     <option value="title_asc">Title A-Z</option>
                     <option value="title_desc">Title Z-A</option>
                 </select>
-                <!-- Filter: Price Range -->
+
                 <div class="filter-section">
                     <label>Price Range</label>
-                    <input type="number" id="minPrice" placeholder="Min" min="0" />
-                    <input type="number" id="maxPrice" placeholder="Max" min="0" />
+                    <input type="number" id="mobileMinPrice" placeholder="Min" min="0" />
+                    <input type="number" id="mobileMaxPrice" placeholder="Max" min="0" />
                 </div>
 
-                <!-- Filter: Condition -->
                 <div class="filter-section">
-                    <label>Condition</label>
-                    <select id="filterCondition">
+                    <label for="mobileFilterCondition">Condition</label>
+                    <select id="mobileFilterCondition">
                         <option value="">Any</option>
                         <option value="New">New</option>
                         <option value="Used - <1w">Used - Less than a week</option>
@@ -145,7 +148,40 @@
                         <option value="Used - >1y">Used - More than a year</option>
                     </select>
                 </div>
+
+                <div class="filter-actions">
+                    <button id="applyMobileFiltersBtn">✅ Apply</button>
+                    <button id="resetMobileFiltersBtn">♻️ Reset</button>
+                </div>
+
             </div>
+
+            <div class="carousel-banner-container">
+                <button class="carousel-btn left" onclick="prevMarketSlide()">&#10094;</button>
+
+                <div class="carousel" id="market-carousel">
+                    <div class="carousel-item" onclick="showSection('market')">
+                        <h2>Hot Deals Today</h2>
+                        <p>Up to 50% Off on Electronics – Limited Time!</p>
+                    </div>
+                    <div class="carousel-item" onclick="showSection('post')">
+                        <h2>New Arrivals</h2>
+                        <p>Just In: Fashion Collection 2025 – Shop Now!</p>
+                    </div>
+                    <div class="carousel-item" onclick="showSection('myposts')">
+                        <h2>Sell Faster</h2>
+                        <p>Post Your Ad Today – Reach Thousands Instantly!</p>
+                    </div>
+                    <div class="carousel-item" onclick="showSection('profile')">
+                        <h2>Verified Sellers</h2>
+                        <p>Buy with Confidence – Verified Sellers Only!</p>
+                    </div>
+                </div>
+
+                <button class="carousel-btn right" onclick="nextMarketSlide()">&#10095;</button>
+            </div>
+
+            <button onclick="renderMarket()" class="refresh-btn">🔄 Refresh</button>
 
             <!-- 📦 Marketplace layout -->
             <div class="market-container">
@@ -155,8 +191,8 @@
 
                     <!-- Filter: Type -->
                     <div class="filter-section">
-                        <label for="filterType">Type</label>
-                        <select id="filterType">
+                        <label for="categoryFilter">Type</label>
+                        <select id="categoryFilter">
                             <option value="">All Types</option>
                             <option value="Electronics">Electronics</option>
                             <option value="Furniture">Furniture</option>
@@ -166,8 +202,8 @@
 
                     <!-- Filter: Order -->
                     <div class="filter-section">
-                        <label for="filterOrder">Order</label>
-                        <select id="filterOrder">
+                        <label for="sortBy">Order</label>
+                        <select id="sortBy">
                             <option value="latest">Latest</option>
                             <option value="oldest">Oldest</option>
                             <option value="price_low_high">Price: Low to High</option>
@@ -198,13 +234,19 @@
                             <option value="Used - >1y">Used - More than a year</option>
                         </select>
                     </div>
+
+                    <div class="filter-actions">
+                        <button id="applyDesktopFiltersBtn">✅ Apply</button>
+                        <button id="resetDesktopFiltersBtn">♻️ Reset</button>
+                    </div>
+
                 </aside>
 
                 <!-- 🖼️ Product Grid -->
                 <div id="productsGrid"></div>
+                <button id="loadMoreBtn">Load More</button>
             </div>
 
-            <button id="loadMoreBtn" class="hidden">Load More</button>
         </section>
 
         <!-- ✅ My Posts -->
@@ -216,19 +258,89 @@
         <!-- ✅ Product Details -->
         <section id="productDetails" class="section"></section>
 
-        <!-- ✅ Profile -->
+        <!-- ✅ Profile Section -->
+        <!-- 🔄 Redesigned Profile Section -->
         <section id="profile" class="section">
-            <form id="profileForm">
-                <h2>Your Profile</h2>
+            <div class="profile-wrapper">
+
+                <!-- 👤 Profile Card -->
+                <aside class="profile-card">
+                    <h2>Welcome</h2>
+                    <p><strong>Name:</strong> <span id="profileName">Anonymous</span></p>
+                    <p><strong>Phone:</strong> <span id="profilePhone">Anonymous</span></p>
+
+                    <div id="profileButtons" class="profile-actions">
+                        <!-- Edit/Logout or Sign In/Up buttons injected here -->
+                    </div>
+
+                    <blockquote class="quote">“Made for SRM, made by SRMITE 🎀”</blockquote>
+                </aside>
+
+                <!-- 📚 Horizontal Tab Content -->
+                <div class="tab-section">
+                    <nav class="tab-nav">
+                        <button data-tab="about">About Us</button>
+                        <button data-tab="faq">FAQs</button>
+                        <button data-tab="privacy">Privacy Policy</button>
+                        <button data-tab="terms">Terms & Conditions</button>
+                    </nav>
+                    <div class="tab-content-wrapper">
+                        <div id="about" class="tab-content"></div>
+                        <div id="faq" class="tab-content"></div>
+                        <div id="privacy" class="tab-content"></div>
+                        <div id="terms" class="tab-content"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ✏️ Redesigned Edit Profile Section -->
+        <section id="editProfile" class="section">
+            <form id="profileForm" class="profile-form" novalidate>
+                <h2>Edit Your Profile</h2>
+
+                <label for="editName">Name</label>
                 <input type="text" id="editName" placeholder="Your Name" required />
-                <input type="tel" id="editPhone" placeholder="Phone Number" required />
-                <p class="quote">“Made for SRM, made by SRMITE 🎀”</p>
-                <div>
-                    <button type="submit">Save</button>
-                    <button type="button" onclick="logoutProfile()">Logout</button>
+
+                <label for="editPhone">Phone</label>
+                <input type="tel" id="editPhone" placeholder="Phone Number" readonly />
+
+                <div class="form-actions">
+                    <button type="submit" class="primary">Save</button>
+                    <button type="button" id="cancelEditProfile">Cancel</button>
                 </div>
             </form>
         </section>
+
+
+        <!-- 🔐 Auth Forms -->
+        <section id="authSection" class="section">
+            <div id="authContainer">
+                <div id="authChoice">
+                    <button onclick="showSignIn()">Sign In</button>
+                    <button onclick="showSignUp()">Sign Up</button>
+                </div>
+
+                <form id="signInForm" class="auth-form hidden">
+                    <h2>Sign In</h2>
+                    <input type="tel" id="signInPhone" placeholder="Mobile Number" required />
+                    <input type="password" id="signInPassword" placeholder="Password" required />
+                    <button type="submit">Login</button>
+                </form>
+
+                <form id="signUpForm" class="auth-form hidden">
+                    <h2>Sign Up</h2>
+                    <input type="text" id="signUpName" placeholder="Your Name" required />
+                    <input type="tel" id="signUpPhone" placeholder="Mobile Number" required />
+                    <input type="password" id="signUpPassword" placeholder="Password" required />
+                    <button type="submit">Create Account</button>
+                </form>
+                <!-- 🔄 Loader -->
+                <div id="authLoader" class="hidden">⏳ Please wait...</div>
+
+            </div>
+        </section>
+
 
         <!-- ✅ Messages -->
         <section id="messages" class="section">
@@ -288,6 +400,9 @@
         <button data-nav="myposts">📦</button>
         <button data-nav="profile">👤</button>
     </nav>
+
+    <!-- 🔔 Toast Notification -->
+    <div id="toast" class="toast hidden"></div>
 
     <!-- ✅ Hidden Inputs + Sound -->
     <input type="file" id="chatFileInput" accept="image/*,.pdf,.doc,.docx" style="display: none" onchange="sendFile()" />
